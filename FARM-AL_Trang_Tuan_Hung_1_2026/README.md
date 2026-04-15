@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# farm_al_trang_tuan_hung_1_2026
+# flutter
 
 A new Flutter project.
 
@@ -16,6 +15,3 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
-=======
-# Sound_Box_Trang_Tuan_Hung__1_2026
->>>>>>> 3770382181dcdf0fdd38a044a98c4c80615ecf2a
