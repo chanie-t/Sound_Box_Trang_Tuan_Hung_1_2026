@@ -19,7 +19,7 @@ class SoundboxApp extends StatelessWidget {
           255,
           255,
           255,
-        ), // Màu nền tối hiện đại
+        ), // Màu nền tối hiện đại (bạn đang set nền trắng ở đây)
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -58,6 +58,23 @@ class SoundboxHomeScreen extends StatelessWidget {
       'Hãy Trao Cho Anh',
       'Muộn Rồi Mà Sao Còn',
       'Có Chắc Yêu Là Đây',
+    ];
+
+    // ---------------------------------------------------------
+    // YÊU CẦU 4: Tạo List tương ứng đối tượng (Object) trong Project
+    // ---------------------------------------------------------
+    List<SongObject> objectPlaylist = [
+      SongObject(
+        title: 'Âm Thầm Bên Em',
+        artist: 'Sơn Tùng M-TP',
+        duration: '4:55',
+      ),
+      SongObject(title: 'Lạc Trôi', artist: 'Sơn Tùng M-TP', duration: '3:53'),
+      SongObject(
+        title: 'Chúng Ta Của Hiện Tại',
+        artist: 'Sơn Tùng M-TP',
+        duration: '5:01',
+      ),
     ];
 
     return Scaffold(
@@ -297,10 +314,94 @@ class SoundboxHomeScreen extends StatelessWidget {
                 }).toList(),
               ),
             ),
+
+            const SizedBox(height: 32),
+
+            // --- YÊU CẦU 4: HIỂN THỊ LIST ĐỐI TƯỢNG (OBJECT) ---
+            const Text(
+              'Danh sách phát (Từ List Object)',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(179, 7, 7, 7),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Column(
+              children: objectPlaylist.map((songObj) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12.0),
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: const Color(
+                      0xFF262A34,
+                    ), // Màu nền tối đồng bộ với khối Map
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.music_video_rounded,
+                        color: Colors.indigoAccent,
+                        size: 32,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              songObj.title,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              songObj.artist,
+                              style: const TextStyle(
+                                color: Colors.white54,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        songObj.duration,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+
             const SizedBox(height: 30), // Lề dưới cùng
           ],
         ),
       ),
     );
   }
+}
+
+// =========================================================
+// YÊU CẦU 4: Class định nghĩa Đối tượng (Object)
+// =========================================================
+class SongObject {
+  final String title;
+  final String artist;
+  final String duration;
+
+  SongObject({
+    required this.title,
+    required this.artist,
+    required this.duration,
+  });
 }
