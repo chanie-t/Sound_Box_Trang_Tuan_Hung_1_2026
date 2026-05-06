@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 
 import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
@@ -145,3 +145,26 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
+
+//Main của Trang Home:
+
+import 'package:flutter/material.dart';
+import '/giuaki/screens/Home.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: '23010569-BUI THANH TUAN',
+      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Arial'),
+      home: const HomeScreen(),
+    );
+  }
+}
+*/

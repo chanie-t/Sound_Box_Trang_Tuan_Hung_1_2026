@@ -57,6 +57,11 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # Đã thêm phần khai báo assets tại đây:
+  assets:
+    - assets/images/logo.png
+    # - assets/  <-- Bạn cũng có thể dùng cú pháp này để nhận diện mọi ảnh trong thư mục assets
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
