@@ -8,28 +8,19 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, String>> morningSongs = [
       {
-        "title": "Rock This",
-        "image": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f",
+        "title": "Nhạc chill",
+        "image": "/assets/images/Mặt trời của em_Phuongly.jpg",
       },
-      {
-        "title": "Feelin’ Myself",
-        "image": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f",
-      },
-      {
-        "title": "This is Beyonce",
-        "image": "https://images.unsplash.com/photo-1516280440614-37939bbacd81",
-      },
-      {
-        "title": "Dope AF",
-        "image": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a",
-      },
+      {"title": "Tình yêu", "image": "/assets/images/muộn rồi mà sao còn.jpg"},
+      {"title": "V-POP", "image": "/assets/images/Lạc trôi.jpg"},
+      {"title": "Vui vẻ", "image": "/assets/images/Hãy trao cho anh.jpg"},
     ];
 
     final List<String> artists = [
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d",
-      "https://images.unsplash.com/photo-1521119989659-a83eee488004",
+      "/assets/images/Cứ chill thôi_chillies.jpg",
+      "/assets/images/Có công mài sắc_Ngolanhuong.jpg",
+      "/assets/images/Đừng làm trái tim anh đau.jpg",
+      "/assets/images/Người im lặng gặp người hay nói.jpg",
     ];
 
     return Scaffold(
@@ -49,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   Text(
-                    "Categories",
+                    "Gợi ý",
                     style: TextStyle(
                       fontSize: 22, // Đồng bộ cỡ 22
                       fontWeight: FontWeight.bold,
@@ -57,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "See more",
+                    "Xem thêm",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -71,11 +62,11 @@ class HomeScreen extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    categoryItem("Art"),
-                    categoryItem("Business"),
-                    categoryItem("Comedy"),
-                    categoryItem("Drama"),
-                    categoryItem("Music"),
+                    categoryItem("Thịnh hành"),
+                    categoryItem("Danh sách yêu thích"),
+                    categoryItem("Lượt nghe nhiều nhất"),
+                    categoryItem("Dành cho bạn"),
+                    categoryItem("Mới phát hành"),
                   ],
                 ),
               ),
@@ -83,7 +74,7 @@ class HomeScreen extends StatelessWidget {
 
               // ================= GOOD MORNING =================
               const Text(
-                "Good morning",
+                "Album",
                 style: TextStyle(
                   fontSize: 26, // Đồng bộ cỡ 26
                   fontWeight: FontWeight.bold,
@@ -144,7 +135,7 @@ class HomeScreen extends StatelessWidget {
 
               // ================= NEW SONGS =================
               const Text(
-                "New songs added",
+                "Bài hát mới",
                 style: TextStyle(
                   fontSize: 26, // Đồng bộ cỡ 26
                   fontWeight: FontWeight.bold,
@@ -163,7 +154,7 @@ class HomeScreen extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.network(
-                        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
+                        "/assets/images/Nơi này có anh.jpg",
                         width: 160,
                         height: 160,
                         fit: BoxFit.cover,
@@ -175,7 +166,7 @@ class HomeScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "Alternative Hip-Hop",
+                            "Truyền cảm hứng",
                             style: TextStyle(
                               fontSize: 16, // Đồng bộ cỡ 16
                               fontWeight: FontWeight.bold,
@@ -184,7 +175,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Playlist • New, leftfield and for the real hip-hop stans!",
+                            "Danh sách nhạc xu hướng",
                             style: TextStyle(
                               fontSize: 14, // Đồng bộ cỡ 14
                               color: Colors.grey.shade700,
@@ -225,7 +216,7 @@ class HomeScreen extends StatelessWidget {
 
               // ================= TOP ARTISTS =================
               const Text(
-                "Recent top artists",
+                "Danh sách thịnh hành",
                 style: TextStyle(
                   fontSize: 26, // Đồng bộ cỡ 26
                   fontWeight: FontWeight.bold,

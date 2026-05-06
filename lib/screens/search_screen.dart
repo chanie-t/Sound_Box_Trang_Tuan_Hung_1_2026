@@ -8,19 +8,19 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, String>> books = [
       {
-        "title": "Hòn đá Phù thủy",
-        "author": "J.K Rowling",
-        "image": "https://covers.openlibrary.org/b/id/7984916-L.jpg",
+        "title": "Nơi này có anh",
+        "author": "Sơn Tùng M-TP",
+        "image": "/assets/images/Nơi này có anh.jpg",
       },
       {
-        "title": "Phòng chứa Bí mật",
-        "author": "J.K Rowling",
-        "image": "https://covers.openlibrary.org/b/id/8231856-L.jpg",
+        "title": "Lạc Trôi",
+        "author": "Sơn Tùng M-TP",
+        "image": "/assets/images/Lạc trôi.jpg",
       },
       {
-        "title": "Tên Tù Nhân Ngục Azkaban",
-        "author": "J.K Rowling",
-        "image": "https://covers.openlibrary.org/b/id/8225267-L.jpg",
+        "title": "Yêu nắm",
+        "author": "EMILY-BIGDADDY",
+        "image": "/assets/images/Yêu nắm_Emily_Bigdaddy.jpg",
       },
     ];
 
@@ -66,7 +66,7 @@ class SearchScreen extends StatelessWidget {
                         Icons.search,
                         color: Colors.black, // Bỏ màu tím
                       ),
-                      hintText: "Harry Potter",
+                      hintText: "Tìm kiếm bài hát, ca sĩ",
                       hintStyle: TextStyle(
                         color: Colors.grey.shade600,
                         fontSize: 16, // Đồng bộ cỡ 16

@@ -8,24 +8,24 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, String>> books = [
       {
-        "title": "Tư tưởng Hồ Chí Minh",
-        "author": "Hồ Chí Minh",
-        "imageUrl": "https://picsum.photos/id/1010/100/100",
+        "title": "Đừng làm trái tim anh đau",
+        "author": "Sơn Tùng M-TP",
+        "imageUrl": "/assets/images/Đừng làm trái tim anh đau.jpg",
       },
       {
-        "title": "Việt Nam sử lược",
-        "author": "Trần Trọng Kim",
-        "imageUrl": "https://picsum.photos/id/1073/100/100",
+        "title": "Mượn rượu tỏ tình",
+        "author": "EMILY-BIGDADDY",
+        "imageUrl": "/assets/images/Mượn rượu tỏ tình_Emily_Bigdaddy.jpg",
       },
       {
-        "title": "Harry Potter và Tên Tù Nhân Ngục Azkaban",
-        "author": "J.K. Rowling",
-        "imageUrl": "https://picsum.photos/id/1040/100/100",
+        "title": "Thích quá rùi nà",
+        "author": "Tlinh",
+        "imageUrl": "/assets/images/Thích quá rùi nà_Tlinh.jpg",
       },
       {
-        "title": "Đảo giấu vàng",
-        "author": "Robert Louis Stevenson",
-        "imageUrl": "https://picsum.photos/id/1050/100/100",
+        "title": "Chăm hoa",
+        "author": "MONO",
+        "imageUrl": "/assets/images/Chăm hoa_MONO.jpg",
       },
     ];
 
@@ -43,7 +43,7 @@ class ProfileScreen extends StatelessWidget {
 
               // --- Tiêu đề "Thư viện" ---
               const Text(
-                "Thư viện",
+                "Danh sách nhạc",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 26, // Cỡ 26 chuẩn
