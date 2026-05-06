@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// Lưu ý: Hãy sửa lại đường dẫn import này cho khớp với cấu trúc thư mục thực tế của bạn
+import '../giuaki/screens/Content.dart'; 
 
 class SoundBoxHeader extends StatelessWidget {
   const SoundBoxHeader({super.key});
@@ -41,9 +43,25 @@ class SoundBoxHeader extends StatelessWidget {
           ],
         ),
 
-        // CÁC ICONS BÊN PHẢI (Thông báo, Lịch sử, Cài đặt)
+        // CÁC ICONS BÊN PHẢI (Giỏ hàng, Thông báo, Lịch sử, Cài đặt)
         Row(
           children: [
+            // Icon Giỏ hàng (Mới thêm)
+            GestureDetector(
+              onTap: () {
+                // Chuyển hướng sang file Content.dart
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ContentScreen(),
+                  ),
+                );
+              },
+              child: const Icon(Icons.shopping_cart_outlined, size: 28),
+            ),
+
+            const SizedBox(width: 15),
+
             // Icon Thông báo có dấu đỏ
             Stack(
               children: [
