@@ -168,3 +168,37 @@ class MyApp extends StatelessWidget {
   }
 }
 */
+/*
+//Main trang about 
+import 'package:flutter/material.dart';
+// 1. Import file About.dart (đảm bảo file này nằm cùng thư mục lib với main.dart)
+import '/giuaki/screens/About.dart'; 
+
+void main() {
+  runApp(const WorldPeasApp());
+}
+
+class WorldPeasApp extends StatelessWidget {
+  const WorldPeasApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'World Peas',
+      // Tắt biểu ngữ Debug cho đẹp giống bản thiết kế
+      debugShowCheckedModeBanner: false, 
+      
+      theme: ThemeData(
+        useMaterial3: true,
+        // Sử dụng màu xanh lá đặc trưng từ code của bạn
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF43642D)),
+        // Bạn có thể định nghĩa Font chữ mặc định ở đây nếu đã cài đặt font Serif
+        fontFamily: 'Serif', 
+      ),
+      
+      // 2. Gọi class LandingPage từ file About.dart làm màn hình khởi đầu
+      home: const LandingPage(), 
+    );
+  }
+}
+*/
