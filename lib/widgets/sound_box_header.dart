@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-// Lưu ý: Hãy sửa lại đường dẫn import này cho khớp với cấu trúc thư mục thực tế của bạn
+// Lưu ý 1: Hãy sửa lại đường dẫn import này cho khớp với cấu trúc thư mục thực tế của bạn
 import '../giuaki/screens/Content.dart'; 
+// Lưu ý 2: Import file SettingsScreen mà chúng ta đã tạo ở bước trước
+import '../screens/settings_screen.dart'; // Sửa lại đường dẫn này nếu cần
 
 class SoundBoxHeader extends StatelessWidget {
   const SoundBoxHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const String logoImageUrl = "assets/images/logo 2.png";
+    const String logoImagePath = "assets/images/logo 2.png";
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -16,8 +18,9 @@ class SoundBoxHeader extends StatelessWidget {
         Row(
           children: [
             ClipOval(
-              child: Image.network(
-                logoImageUrl,
+              // Đã đổi từ Image.network thành Image.asset vì đây là ảnh có sẵn trong máy
+              child: Image.asset(
+                logoImagePath,
                 width: 35,
                 height: 35,
                 fit: BoxFit.cover,
@@ -46,7 +49,7 @@ class SoundBoxHeader extends StatelessWidget {
         // CÁC ICONS BÊN PHẢI (Giỏ hàng, Thông báo, Lịch sử, Cài đặt)
         Row(
           children: [
-            // Icon Giỏ hàng (Mới thêm)
+            // Icon Giỏ hàng
             GestureDetector(
               onTap: () {
                 // Chuyển hướng sang file Content.dart
@@ -88,8 +91,19 @@ class SoundBoxHeader extends StatelessWidget {
 
             const SizedBox(width: 15),
 
-            // Icon Cài đặt
-            const Icon(Icons.settings, size: 28),
+            // Icon Cài đặt (Đã thêm sự kiện chuyển trang)
+            GestureDetector(
+              onTap: () {
+                // Chuyển hướng sang trang SettingsScreen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                );
+              },
+              child: const Icon(Icons.settings, size: 28),
+            ),
           ],
         ),
       ],

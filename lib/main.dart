@@ -1,11 +1,23 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart'; // 1. Thêm gói Firebase Core
+import 'firebase_options.dart'; // 2. Thêm file cấu hình tự động tạo bởi FlutterFire CLI
 
 import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
-import 'screens/search_screen.dart'; // Đã import màn hình Search của bạn
+import 'screens/search_screen.dart'; 
 import 'widgets/sound_box_header.dart';
+import 'screens/login_screen.dart';
 
-void main() {
+// 3. Chuyển hàm main() thành async để đợi Firebase khởi tạo xong
+void main() async {
+  // Đảm bảo các dịch vụ nền tảng (engine) của Flutter được thiết lập đầy đủ trước
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Khởi tạo ứng dụng Firebase dựa trên cấu hình tự động của thiết bị hiện tại (Android/iOS)
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const SoundBoxApp());
 }
 
@@ -18,7 +30,7 @@ class SoundBoxApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Sound Box',
       theme: ThemeData.light(),
-      home: const MainScreen(),
+      home: const LoginScreen(),
     );
   }
 }
@@ -33,10 +45,9 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int currentIndex = 0;
 
-  // ================= ĐÃ SỬA MẢNG NÀY =================
   final List<Widget> screens = [
     const HomeScreen(),
-    const SearchScreen(), // <-- Đã bỏ dòng Text tạm thời và gọi SearchScreen()
+    const SearchScreen(), 
     const ProfileScreen(),
   ];
 
@@ -45,14 +56,12 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: screens[currentIndex],
-
       bottomNavigationBar: Container(
         height: 90,
         decoration: const BoxDecoration(
           color: Colors.white,
           boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
         ),
-
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -148,7 +157,7 @@ class _MainScreenState extends State<MainScreen> {
 
 //Main của Trang Home:
 
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import '/giuaki/screens/Home.dart';
 
 void main() {
@@ -166,8 +175,8 @@ class MyApp extends StatelessWidget {
       home: const HomeScreen(),
     );
   }
-}
-*/
+}*/
+
 /*
 //Main trang about 
 import 'package:flutter/material.dart';
