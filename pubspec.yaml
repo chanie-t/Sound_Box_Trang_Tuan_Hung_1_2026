@@ -15,6 +15,9 @@ dependencies:
   firebase_core: ^4.10.0
   firebase_auth: ^6.5.2
   cloud_firestore: ^6.5.0
+  just_audio: ^0.9.45
+  provider: ^6.1.2
+  file_picker: ^8.1.7
 
 dev_dependencies:
   flutter_test:
@@ -26,3 +29,5 @@ flutter:
 
   assets:
     - assets/images/logo 2.png
+    - assets/images/
+  

@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart'; // 1. Thêm gói Firebase Core
-import 'firebase_options.dart'; // 2. Thêm file cấu hình tự động tạo bởi FlutterFire CLI
-
+import 'package:provider/provider.dart';
 import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
-import 'screens/search_screen.dart'; 
-import 'widgets/sound_box_header.dart';
-import 'screens/login_screen.dart';
+import 'screens/search_screen.dart';
+import 'screens/playing_screen.dart';
+import 'providers/audio_provider.dart';
 
-// 3. Chuyển hàm main() thành async để đợi Firebase khởi tạo xong
-void main() async {
-  // Đảm bảo các dịch vụ nền tảng (engine) của Flutter được thiết lập đầy đủ trước
-  WidgetsFlutterBinding.ensureInitialized();
-  
-  // Khởi tạo ứng dụng Firebase dựa trên cấu hình tự động của thiết bị hiện tại (Android/iOS)
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AudioProvider(),
+      child: const SoundBoxApp(),
+    ),
   );
-
-  runApp(const SoundBoxApp());
 }
 
 class SoundBoxApp extends StatelessWidget {
@@ -29,8 +23,8 @@ class SoundBoxApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Sound Box',
-      theme: ThemeData.light(),
-      home: const LoginScreen(),
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const MainScreen(),
     );
   }
 }
@@ -47,105 +41,203 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> screens = [
     const HomeScreen(),
-    const SearchScreen(), 
+    const SearchScreen(),
     const ProfileScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final audioProvider = Provider.of<AudioProvider>(context);
+    final currentSong = audioProvider.currentSong;
+
+    // --- TÍNH TOÁN TIẾN TRÌNH THỜI GIAN THỰC CHO LINE PROGRESS BAR ---
+    double progressFactor = 0.0;
+    if (currentSong != null) {
+      final positionMs = audioProvider.position.inMilliseconds.toDouble();
+      final durationMs = audioProvider.duration.inMilliseconds.toDouble();
+      if (durationMs > 0) {
+        progressFactor = (positionMs / durationMs).clamp(0.0, 1.0);
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: screens[currentIndex],
-      bottomNavigationBar: Container(
-        height: 90,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+      body: IndexedStack(index: currentIndex, children: screens),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // ================= MINI PLAYER THEO MẪU 4 (KHÍT DẦM) =================
+          if (currentSong != null)
+            GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => const FractionallySizedBox(
+                    heightFactor: 0.93,
+                    child: PlayingScreen(),
+                  ),
+                );
+              },
+              child: Container(
+                height: 68,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors
+                      .white, // Chuyển sang màu trắng/sáng theo ảnh mẫu của bạn
+                  border: Border(
+                    top: BorderSide(color: Colors.grey.shade100, width: 1),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    // 1. Ảnh vuông nhỏ bài hát
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: currentSong["image"]!.startsWith('assets')
+                          ? Image.asset(
+                              currentSong["image"]!,
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              currentSong["image"]!,
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                    const SizedBox(width: 12),
+
+                    // 2. Tiêu đề và ca sĩ nghệ sĩ
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            currentSong["title"]!,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            currentSong["artist"] ?? "Chưa rõ nghệ sĩ",
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey.shade500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // 3. Biểu tượng tai nghe kết nối (Mẫu số 4)
+                    IconButton(
+                      icon: Icon(
+                        Icons.headphones_outlined,
+                        color: Colors.grey.shade700,
+                        size: 24,
+                      ),
+                      onPressed: () {},
+                    ),
+
+                    // 4. Biểu tượng trái tim xanh lá cây ĐÃ ĐỒNG BỘ LOGIC
+                    IconButton(
+                      icon: Icon(
+                        audioProvider.isFavorite(currentSong["id"] ?? "")
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_border_rounded,
+                        color: audioProvider.isFavorite(currentSong["id"] ?? "")
+                            ? const Color(
+                                0xFF1DB954,
+                              ) // Màu xanh Spotify khi đã thích
+                            : Colors.grey.shade400, // Màu xám khi chưa thích
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        audioProvider.toggleFavorite(currentSong);
+                      },
+                    ),
+
+                    // 5. Nút bấm Play/Pause nguyên bản đen gọn
+                    IconButton(
+                      icon: Icon(
+                        audioProvider.isPlaying
+                            ? Icons.pause_rounded
+                            : Icons.play_arrow_rounded,
+                        color: Colors.black87,
+                        size: 30,
+                      ),
+                      onPressed: () => audioProvider.togglePlay(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+          // ================= LINE PROGRESS BAR MẢNH ĐÃ ĐỒNG BỘ THỜI GIAN THỰC =================
+          if (currentSong != null)
+            Container(
+              height: 2.5, // Độ dày thanh tiến trình siêu mảnh tinh tế
+              width: double.infinity,
+              color: Colors.grey.shade200,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: FractionallySizedBox(
+                  widthFactor:
+                      progressFactor, // Đồng bộ trực tiếp theo thời gian phát thực tế
+                  child: Container(color: Colors.black87),
+                ),
+              ),
+            ),
+
+          // ================= NAVIGATION BOTTOM BAR CHUẨN MẪU =================
+          Container(
+            height: 80,
+            color: const Color(0xFFFAFAFA),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildNavItem(Icons.home_filled, "Home", 0),
+                _buildNavItem(Icons.search_rounded, "Search", 1),
+                _buildNavItem(Icons.library_music_rounded, "Your Library", 2),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, String label, int index) {
+    final isSelected = currentIndex == index;
+    return InkWell(
+      onTap: () => setState(() => currentIndex = index),
+      child: SizedBox(
+        width: 100,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // HOME
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  currentIndex = 0;
-                });
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.home,
-                    size: 35,
-                    color: currentIndex == 0 ? Colors.black : Colors.grey,
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    "Home",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: currentIndex == 0 ? Colors.black : Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
+            Icon(
+              icon,
+              size: 28,
+              color: isSelected ? Colors.black87 : Colors.grey.shade500,
             ),
-
-            // SEARCH
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  currentIndex = 1;
-                });
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.search,
-                    size: 35,
-                    color: currentIndex == 1 ? Colors.black : Colors.grey,
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    "Search",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: currentIndex == 1 ? Colors.black : Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // MY MUSIC (PROFILE)
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  currentIndex = 2;
-                });
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const CircleAvatar(
-                    radius: 18,
-                    backgroundColor: Colors.grey,
-                    child: Icon(Icons.person, color: Colors.white),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    "My Music",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: currentIndex == 2 ? Colors.black : Colors.grey,
-                    ),
-                  ),
-                ],
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                color: isSelected ? Colors.black87 : Colors.grey.shade500,
               ),
             ),
           ],
@@ -154,60 +246,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-
-//Main của Trang Home:
-
-/*import 'package:flutter/material.dart';
-import '/giuaki/screens/Home.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: '23010569-BUI THANH TUAN',
-      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Arial'),
-      home: const HomeScreen(),
-    );
-  }
-}*/
-
-/*
-//Main trang about 
-import 'package:flutter/material.dart';
-// 1. Import file About.dart (đảm bảo file này nằm cùng thư mục lib với main.dart)
-import '/giuaki/screens/About.dart'; 
-
-void main() {
-  runApp(const WorldPeasApp());
-}
-
-class WorldPeasApp extends StatelessWidget {
-  const WorldPeasApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'World Peas',
-      // Tắt biểu ngữ Debug cho đẹp giống bản thiết kế
-      debugShowCheckedModeBanner: false, 
-      
-      theme: ThemeData(
-        useMaterial3: true,
-        // Sử dụng màu xanh lá đặc trưng từ code của bạn
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF43642D)),
-        // Bạn có thể định nghĩa Font chữ mặc định ở đây nếu đã cài đặt font Serif
-        fontFamily: 'Serif', 
-      ),
-      
-      // 2. Gọi class LandingPage từ file About.dart làm màn hình khởi đầu
-      home: const LandingPage(), 
-    );
-  }
-}
-*/

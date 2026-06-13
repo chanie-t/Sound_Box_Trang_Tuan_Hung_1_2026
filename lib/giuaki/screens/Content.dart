@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-// Bạn lưu ý đường dẫn import này nhé. Dựa theo ảnh cây thư mục của bạn:
-// Từ giuaki/screens/Content.dart đi ra ngoài 2 cấp để vào thư mục widgets
-import '../../widgets/sound_box_header.dart'; 
+import '../../widgets/sound_box_header.dart';
+import '../../screens/playing_screen.dart';
 
 class ContentScreen extends StatelessWidget {
   const ContentScreen({Key? key}) : super(key: key);
@@ -38,16 +37,13 @@ class ContentScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 48,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Serif', 
+                      fontFamily: 'Serif',
                     ),
                   ),
                   const SizedBox(width: 16),
                   Text(
                     '3 items',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 20, color: Colors.grey[600]),
                   ),
                 ],
               ),
@@ -65,7 +61,8 @@ class ContentScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         _buildCartItem(
-                          imageUrl: '/assets/images/Đừng làm trái tim anh đau.jpg', // Thay link ảnh thực tế của bạn vào đây
+                          imageUrl:
+                              'assets/images/Đừng làm trái tim anh đau.jpg', // Thay link ảnh thực tế của bạn vào đây
                           title: 'Đừng làm trái tim anh đau',
                           pricePerUnit: '\$5.99 / lb',
                           weight: '1 lb',
@@ -73,7 +70,8 @@ class ContentScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         _buildCartItem(
-                          imageUrl: '/assets/images/Mượn rượu tỏ tình_Emily_Bigdaddy.jpg', // Thay link ảnh thực tế của bạn vào đây
+                          imageUrl:
+                              'assets/images/Mượn rượu tỏ tình_Emily_Bigdaddy.jpg', // Thay link ảnh thực tế của bạn vào đây
                           title: 'Mượn rượu tỏ tình',
                           pricePerUnit: '\$12.99 / lb',
                           weight: '1 lb',
@@ -81,7 +79,8 @@ class ContentScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         _buildCartItem(
-                          imageUrl: '/assets/images/Thích quá rùi nà_Tlinh.jpg', // Thay link ảnh thực tế của bạn vào đây
+                          imageUrl:
+                              'assets/images/Thích quá rùi nà_Tlinh.jpg', // Thay link ảnh thực tế của bạn vào đây
                           title: 'Thích quá rùi nà',
                           pricePerUnit: '\$2.99 / lb',
                           weight: '5 lb',
@@ -92,10 +91,7 @@ class ContentScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 40),
                   // Cột phải: Order Summary
-                  Expanded(
-                    flex: 3,
-                    child: _buildOrderSummary(),
-                  ),
+                  Expanded(flex: 3, child: _buildOrderSummary()),
                 ],
               ),
             ],
@@ -114,78 +110,116 @@ class ContentScreen extends StatelessWidget {
     required String weight,
     required String totalPrice,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F9FA), // Màu nền xám nhạt
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      child: Row(
-        children: [
-          // Khung ảnh sản phẩm đã tích hợp Image.network
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              imageUrl,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-              // Phòng trường hợp link ảnh lỗi hoặc đang load chậm
-              errorBuilder: (context, error, stackTrace) => Container(
-                width: 100,
-                height: 100,
-                color: Colors.grey[300],
-                child: const Icon(Icons.image_not_supported, color: Colors.grey),
-              ),
+    return Builder(
+      builder: (context) {
+        return InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const PlayingScreen()),
+            );
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF8F9FA), // Màu nền xám nhạt
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey[200]!),
             ),
-          ),
-          const SizedBox(width: 20),
-          
-          // Thông tin sản phẩm
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  pricePerUnit,
-                  style: TextStyle(fontSize: 16, color: primaryGreen, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 12),
-                
-                // Nút chọn khối lượng
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.grey[300]!),
+                // Khung ảnh sản phẩm đã tích hợp Image.network
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    imageUrl,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                    // Phòng trường hợp link ảnh lỗi hoặc đang load chậm
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.grey[300],
+                      child: const Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey,
+                      ),
+                    ),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
+                ),
+                const SizedBox(width: 20),
+
+                // Thông tin sản phẩm
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(weight, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      const SizedBox(width: 8),
-                      Icon(Icons.edit_outlined, size: 16, color: Colors.grey[600]),
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        pricePerUnit,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: primaryGreen,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Nút chọn khối lượng
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.grey[300]!),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              weight,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Icon(
+                              Icons.edit_outlined,
+                              size: 16,
+                              color: Colors.grey[600],
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
+                  ),
+                ),
+
+                // Tổng giá của item
+                Text(
+                  totalPrice,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          
-          // Tổng giá của item
-          Text(
-            totalPrice,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -211,7 +245,7 @@ class ContentScreen extends StatelessWidget {
           const SizedBox(height: 16),
           _buildSummaryRow('Tax', '\$2.00'),
           const SizedBox(height: 24),
-          
+
           // Total Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -222,12 +256,15 @@ class ContentScreen extends StatelessWidget {
               ),
               Text(
                 '\$39.92',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 30),
-          
+
           // Nút thanh toán
           SizedBox(
             width: double.infinity,
@@ -245,7 +282,11 @@ class ContentScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Continue to payment',
-                    style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   SizedBox(width: 8),
                   Icon(Icons.arrow_forward, color: Colors.white, size: 20),
@@ -262,10 +303,7 @@ class ContentScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 16, color: Colors.grey[800]),
-        ),
+        Text(label, style: TextStyle(fontSize: 16, color: Colors.grey[800])),
         Text(
           value,
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),

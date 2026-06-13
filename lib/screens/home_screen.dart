@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/audio_provider.dart';
 import '../widgets/sound_box_header.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -6,22 +8,67 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Gọi AudioProvider để lấy thông tin bài hát và danh sách yêu thích
+    final audioProvider = Provider.of<AudioProvider>(context);
+
     final List<Map<String, String>> morningSongs = [
       {
+        "id": "morning_1",
         "title": "Nhạc chill",
-        "image": "/assets/images/Mặt trời của em_Phuongly.jpg",
+        "artist": "Phương Ly",
+        "image": "assets/images/Mặt trời của em_Phuongly.jpg",
+        "audioUrl":
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
       },
-      {"title": "Tình yêu", "image": "/assets/images/muộn rồi mà sao còn.jpg"},
-      {"title": "V-POP", "image": "/assets/images/Lạc trôi.jpg"},
-      {"title": "Vui vẻ", "image": "/assets/images/Hãy trao cho anh.jpg"},
+      {
+        "id": "morning_2",
+        "title": "Tình yêu",
+        "artist": "Sơn Tùng M-TP",
+        "image": "assets/images/muộn rồi mà sao còn.jpg",
+        "audioUrl":
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+      },
+      {
+        "id": "morning_3",
+        "title": "V-POP",
+        "artist": "Sơn Tùng M-TP",
+        "image": "assets/images/Lạc trôi.jpg",
+        "audioUrl":
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+      },
+      {
+        "id": "morning_4",
+        "title": "Vui vẻ",
+        "artist": "Sơn Tùng M-TP",
+        "image": "assets/images/Hãy trao cho anh.jpg",
+        "audioUrl":
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+      },
     ];
 
     final List<String> artists = [
-      "/assets/images/Cứ chill thôi_chillies.jpg",
-      "/assets/images/Có công mài sắc_Ngolanhuong.jpg",
-      "/assets/images/Đừng làm trái tim anh đau.jpg",
-      "/assets/images/Người im lặng gặp người hay nói.jpg",
+      "assets/images/Cứ chill thôi_chillies.jpg",
+      "assets/images/Có công mài sắc_Ngolanhuong.jpg",
+      "assets/images/Đừng làm trái tim anh đau.jpg",
+      "assets/images/Người im lặng gặp người hay nói.jpg",
     ];
+
+    final List<Map<String, dynamic>> musicUtilities = [
+      {"label": "Nhận diện", "icon": Icons.radar_rounded},
+      {"label": "Hẹn giờ", "icon": Icons.hourglass_top_rounded},
+      {"label": "Bộ chỉnh âm", "icon": Icons.tune_rounded},
+      {"label": "Tải về", "icon": Icons.download_for_offline_rounded},
+      {"label": "Radio & Pod", "icon": Icons.radio_rounded},
+    ];
+
+    final Map<String, String> newSong = {
+      "id":
+          "new_song_1", // Bổ sung ID để hệ thống phân biệt khi thêm vào danh sách yêu thích
+      "title": "Nơi này có anh",
+      "artist": "Sơn Tùng M-TP",
+      "image": "assets/images/Nơi này có anh.jpg",
+      "audioUrl": "assets/audios/NoiNayCoAnh_SonTungMTP.mp3",
+    };
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -35,14 +82,14 @@ class HomeScreen extends StatelessWidget {
               const SoundBoxHeader(),
               const SizedBox(height: 30),
 
-              // ================= CATEGORIES =================
+              // ================= 1. CATEGORIES (GỢI Ý) =================
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   Text(
                     "Gợi ý",
                     style: TextStyle(
-                      fontSize: 22, // Đồng bộ cỡ 22
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -58,150 +105,240 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: categoryItem(
+                          "Thịnh hành",
+                          const Color(0xFFFCE4E4),
+                          100,
+                          Icons.local_fire_department_rounded,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: categoryItem(
+                          "Danh sách yêu thích",
+                          const Color(0xFFE8E0F5),
+                          100,
+                          Icons.favorite_rounded,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: categoryItem(
+                          "Lượt nghe nhiều",
+                          const Color(0xFFE3F2FD),
+                          115,
+                          Icons.trending_up_rounded,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: categoryItem(
+                          "Dành cho bạn",
+                          const Color(0xFFFFF3E0),
+                          115,
+                          Icons.auto_awesome_rounded,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: categoryItem(
+                          "Mới phát hành",
+                          const Color(0xFFE8F5E9),
+                          115,
+                          Icons.fiber_new_rounded,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+
+              // ================= 2. QUICK UTILITIES =================
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
                 child: Row(
-                  children: [
-                    categoryItem("Thịnh hành"),
-                    categoryItem("Danh sách yêu thích"),
-                    categoryItem("Lượt nghe nhiều nhất"),
-                    categoryItem("Dành cho bạn"),
-                    categoryItem("Mới phát hành"),
-                  ],
+                  children: musicUtilities.map((utility) {
+                    return utilityItem(utility["icon"], utility["label"]);
+                  }).toList(),
                 ),
               ),
               const SizedBox(height: 35),
 
-              // ================= GOOD MORNING =================
+              // ================= 3. ALBUM =================
               const Text(
-                "Album",
+                "Album hot",
                 style: TextStyle(
-                  fontSize: 26, // Đồng bộ cỡ 26
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: morningSongs.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 15,
-                  crossAxisSpacing: 15,
-                  childAspectRatio: 2.7,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 2.6,
                 ),
                 itemBuilder: (context, index) {
                   final song = morningSongs[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(18),
-                            bottomLeft: Radius.circular(18),
+                  return GestureDetector(
+                    onTap: () => audioProvider.playSong(song),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.02),
+                            blurRadius: 6,
                           ),
-                          child: Image.network(
-                            song["image"]!,
-                            width: 70,
-                            height: double.infinity,
-                            fit: BoxFit.cover,
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(14),
+                              bottomLeft: Radius.circular(14),
+                            ),
+                            child: _buildImage(
+                              song["image"]!,
+                              width: 65,
+                              height: double.infinity,
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              song["title"]!,
-                              style: const TextStyle(
-                                fontSize: 16, // Đồng bộ cỡ 16
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                              ),
+                              child: Text(
+                                song["title"]!,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
               ),
-              const SizedBox(height: 35),
+              const SizedBox(height: 30),
 
-              // ================= NEW SONGS =================
+              // ================= 4. NEW SONGS (ĐÃ SỬA ĐỒNG BỘ TRÁI TIM) =================
               const Text(
                 "Bài hát mới",
                 style: TextStyle(
-                  fontSize: 26, // Đồng bộ cỡ 26
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               Container(
-                padding: const EdgeInsets.all(15),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(25),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.02),
+                      blurRadius: 8,
+                    ),
+                  ],
                 ),
                 child: Row(
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        "/assets/images/Nơi này có anh.jpg",
-                        width: 160,
-                        height: 160,
-                        fit: BoxFit.cover,
+                      borderRadius: BorderRadius.circular(16),
+                      child: _buildImage(
+                        newSong["image"]!,
+                        width: 110,
+                        height: 110,
                       ),
                     ),
-                    const SizedBox(width: 20),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Truyền cảm hứng",
-                            style: TextStyle(
-                              fontSize: 16, // Đồng bộ cỡ 16
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
                           Text(
-                            "Danh sách nhạc xu hướng",
-                            style: TextStyle(
-                              fontSize: 14, // Đồng bộ cỡ 14
-                              color: Colors.grey.shade700,
-                              height: 1.5,
+                            newSong["title"]!,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 25),
+                          const SizedBox(height: 6),
+                          Text(
+                            newSong["artist"]!,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(
-                                Icons.favorite_border,
-                                size: 30,
-                                color: Colors.black,
-                              ),
-                              Container(
-                                width: 55,
-                                height: 55,
-                                decoration: const BoxDecoration(
-                                  color: Colors.black,
-                                  shape: BoxShape.circle,
+                              // Thay thế icon cũ bằng IconButton kết nối logic từ AudioProvider
+                              IconButton(
+                                constraints: const BoxConstraints(),
+                                padding: EdgeInsets.zero,
+                                icon: Icon(
+                                  audioProvider.isFavorite(newSong["id"] ?? "")
+                                      ? Icons.favorite_rounded
+                                      : Icons.favorite_border_rounded,
+                                  color:
+                                      audioProvider.isFavorite(
+                                        newSong["id"] ?? "",
+                                      )
+                                      ? const Color(
+                                          0xFF1DB954,
+                                        ) // Màu xanh Spotify
+                                      : Colors.grey.shade600,
+                                  size: 26,
                                 ),
-                                child: const Icon(
-                                  Icons.play_arrow,
-                                  color: Colors.white,
-                                  size: 35,
+                                onPressed: () {
+                                  audioProvider.toggleFavorite(newSong);
+                                },
+                              ),
+                              GestureDetector(
+                                onTap: () => audioProvider.playSong(newSong),
+                                child: Container(
+                                  width: 42,
+                                  height: 42,
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFF3A60E5),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.play_arrow_rounded,
+                                    color: Colors.white,
+                                    size: 28,
+                                  ),
                                 ),
                               ),
                             ],
@@ -212,40 +349,39 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 35),
+              const SizedBox(height: 30),
 
-              // ================= TOP ARTISTS =================
+              // ================= 5. TOP ARTISTS =================
               const Text(
                 "Danh sách thịnh hành",
                 style: TextStyle(
-                  fontSize: 26, // Đồng bộ cỡ 26
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               SizedBox(
-                height: 130,
+                height: 110,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: artists.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.only(right: 15),
+                      padding: const EdgeInsets.only(right: 14),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.network(
+                        borderRadius: BorderRadius.circular(16),
+                        child: _buildImage(
                           artists[index],
-                          width: 120,
-                          height: 120,
-                          fit: BoxFit.cover,
+                          width: 110,
+                          height: 110,
                         ),
                       ),
                     );
                   },
                 ),
               ),
-              const SizedBox(height: 120),
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -253,23 +389,87 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget categoryItem(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 15),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.black, // Bỏ màu tím, đồng bộ đen
+  Widget _buildImage(
+    String imagePath, {
+    required double width,
+    required double height,
+  }) {
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return Image.network(
+        imagePath,
+        width: width,
+        height: height,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Image.asset(
+        imagePath,
+        width: width,
+        height: height,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            width: width,
+            height: height,
+            color: Colors.grey.shade200,
+            child: const Icon(Icons.music_note_rounded, color: Colors.grey),
+          );
+        },
+      );
+    }
+  }
+
+  Widget categoryItem(
+    String title,
+    Color backgroundColor,
+    double height,
+    IconData icon,
+  ) {
+    return Container(
+      height: height,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Stack(
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+              height: 1.2,
+            ),
           ),
-        ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Icon(icon, size: 32, color: Colors.black38),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget utilityItem(IconData icon, String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 28, color: const Color(0xFF3A60E5)),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
+          ),
+        ],
       ),
     );
   }

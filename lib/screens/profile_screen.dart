@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/audio_provider.dart';
 import '../widgets/sound_box_header.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String _searchQuery = ""; // Từ khóa để lọc trong danh sách yêu thích
+
+  @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> books = [
-      {
-        "title": "Đừng làm trái tim anh đau",
-        "author": "Sơn Tùng M-TP",
-        "imageUrl": "/assets/images/Đừng làm trái tim anh đau.jpg",
-      },
-      {
-        "title": "Mượn rượu tỏ tình",
-        "author": "EMILY-BIGDADDY",
-        "imageUrl": "/assets/images/Mượn rượu tỏ tình_Emily_Bigdaddy.jpg",
-      },
-      {
-        "title": "Thích quá rùi nà",
-        "author": "Tlinh",
-        "imageUrl": "/assets/images/Thích quá rùi nà_Tlinh.jpg",
-      },
-      {
-        "title": "Chăm hoa",
-        "author": "MONO",
-        "imageUrl": "/assets/images/Chăm hoa_MONO.jpg",
-      },
-    ];
+    // Lắng nghe trực tiếp từ AudioProvider để biết danh sách bài hát yêu thích thay đổi lúc nào
+    final audioProvider = Provider.of<AudioProvider>(context);
+    final allFavorites = audioProvider.favoriteSongs;
+
+    // Lọc danh sách yêu thích dựa trên từ khóa người dùng nhập vào TextField
+    final filteredFavorites = allFavorites.where((song) {
+      final titleMatch = song["title"]!.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
+      final artistMatch = song["artist"]!.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
+      return titleMatch || artistMatch;
+    }).toList();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -41,12 +42,12 @@ class ProfileScreen extends StatelessWidget {
               const SoundBoxHeader(),
               const SizedBox(height: 30),
 
-              // --- Tiêu đề "Thư viện" ---
+              // --- Tiêu đề ---
               const Text(
                 "Danh sách nhạc",
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 26, // Cỡ 26 chuẩn
+                  fontSize: 26,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -61,80 +62,128 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: const TextField(
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16, // Đồng bộ cỡ 16
-                  ),
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value; // Cập nhật từ khóa lọc UI
+                    });
+                  },
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Tìm bài hát hoặc tên ca sĩ",
-                    hintStyle: TextStyle(
+                    icon: Icon(Icons.search, color: Colors.grey.shade600),
+                    hintText: "Tìm bài hát hoặc tên ca sĩ yêu thích",
+                    hintStyle: const TextStyle(
                       color: Colors.black54,
-                      fontSize: 16, // Đồng bộ cỡ 16
+                      fontSize: 16,
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: 24),
 
-              // --- Danh sách Audiobooks ---
+              // --- Danh sách hiển thị bài hát đã thích ---
               Expanded(
-                child: ListView.builder(
-                  itemCount: books.length,
-                  itemBuilder: (context, index) {
-                    final book = books[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Row(
-                        children: [
-                          // Ảnh bìa sách
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              8,
-                            ), // Tăng góc bo một xíu cho đẹp
-                            child: Image.network(
-                              book['imageUrl']!,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
+                child: allFavorites.isEmpty
+                    ? const Center(
+                        child: Text(
+                          "Chưa có bài hát nào trong danh sách yêu thích",
+                          style: TextStyle(color: Colors.grey, fontSize: 15),
+                        ),
+                      )
+                    : filteredFavorites.isEmpty
+                    ? const Center(
+                        child: Text(
+                          "Không tìm thấy bài hát phù hợp",
+                          style: TextStyle(color: Colors.grey, fontSize: 15),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: filteredFavorites.length,
+                        itemBuilder: (context, index) {
+                          final song = filteredFavorites[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            child: InkWell(
+                              onTap: () {
+                                // Bấm vào bài hát yêu thích sẽ phát ngay lập tức
+                                audioProvider.playSong(song);
+                              },
+                              child: Row(
+                                children: [
+                                  // Ảnh bìa
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.asset(
+                                      song['image']!.startsWith('/')
+                                          ? song['image']!.substring(1)
+                                          : song['image']!,
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                            return Container(
+                                              width: 80,
+                                              height: 80,
+                                              color: Colors.grey.shade200,
+                                              child: const Icon(
+                                                Icons.music_note,
+                                                color: Colors.grey,
+                                              ),
+                                            );
+                                          },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
 
-                          // Thông tin sách
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  book['title']!,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16, // Cỡ 16 chuẩn
-                                    fontWeight: FontWeight.w600,
-                                    height: 1.3,
+                                  // Thông tin chữ
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          song['title']!,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            height: 1.3,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          song['artist']!,
+                                          style: TextStyle(
+                                            color: Colors.grey.shade700,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  book['author']!,
-                                  style: TextStyle(
-                                    color:
-                                        Colors.grey.shade700, // Đồng bộ màu xám
-                                    fontSize: 14, // Tăng lên 14 chuẩn
+
+                                  // Nút bỏ yêu thích nhanh ngay tại danh sách
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.favorite_rounded,
+                                      color: Color(
+                                        0xFF1DB954,
+                                      ), // Trái tim xanh Spotify
+                                    ),
+                                    onPressed: () {
+                                      audioProvider.toggleFavorite(song);
+                                    },
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
             ],
           ),
