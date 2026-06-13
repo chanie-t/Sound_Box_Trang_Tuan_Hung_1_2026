@@ -18,25 +18,72 @@ class _SearchScreenState extends State<SearchScreen> {
       "title": "Nơi này có anh",
       "artist": "Sơn Tùng M-TP",
       "image": "assets/images/Nơi này có anh.jpg",
-      // Bạn có thể gán thêm link audioUrl thật vào đây nếu có, nếu không mặc định Provider sẽ chạy nhạc demo
-      "audioUrl":
-          "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      // 👉 GẮN LINK MẠNG HOẶC ĐƯỜNG DẪN ASSETS TẠI ĐÂY:
+      "audioUrl": "assets/sound/NoiNayCoAnh_SonTungMTP.mp3",
     },
     {
       "id": "song_2",
       "title": "Lạc Trôi",
       "artist": "Sơn Tùng M-TP",
       "image": "assets/images/Lạc trôi.jpg",
-      "audioUrl":
-          "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+      "audioUrl": "assets/sound/Lạc Trôi.mp3", // (Ví dụ dùng nhạc lưu sẵn trong thư mục code)
     },
     {
       "id": "song_3",
       "title": "Yêu nắm",
       "artist": "EMILY-BIGDADDY",
       "image": "assets/images/Yêu nắm_Emily_Bigdaddy.jpg",
-      "audioUrl":
-          "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+      "audioUrl": "assets/sound/Yêu Nắm.mp3",
+    },
+    // BỔ SUNG CÁC BÀI HÁT TỪ TRANG CHỦ VÀO ĐÂY ĐỂ TÌM KIẾM
+    {
+      "id": "morning_1",
+      "title": "Mặt trời của em",
+      "artist": "Phương Ly",
+      "image": "assets/images/Mặt trời của em_Phuongly.jpg",
+      "audioUrl": "assets/sound/Mặt Trời Của Em.mp3",
+    },
+    {
+      "id": "morning_2",
+      "title": "Muộn rồi mà sao còn",
+      "artist": "Sơn Tùng M-TP",
+      "image": "assets/images/muộn rồi mà sao còn.jpg",
+      "audioUrl": "assets/sound/Muộn Rồi Mà Sao Còn.mp3",
+    },
+    {
+      "id": "morning_4",
+      "title": "Hãy trao cho anh",
+      "artist": "Sơn Tùng M-TP",
+      "image": "assets/images/Hãy trao cho anh.jpg",
+      "audioUrl": "assets/sound/Hãy Trao Cho Anh.mp3",
+    },
+    {
+      "id": "trending_1",
+      "title": "Cứ chill thôi",
+      "artist": "Chillies",
+      "image": "assets/images/Cứ chill thôi_chillies.jpg",
+      "audioUrl": "assets/sound/Cứ Chill Thôi.mp3", 
+    },
+    {
+      "id": "trending_2",
+      "title": "Có công mài sắc",
+      "artist": "Ngô Lan Hương",
+      "image": "assets/images/Có công mài sắc_Ngolanhuong.jpg",
+      "audioUrl": "assets/sound/Có công mài 'Sắc'.mp3",
+    },
+    {
+      "id": "trending_3",
+      "title": "Đừng làm trái tim anh đau",
+      "artist": "Sơn Tùng M-TP",
+      "image": "assets/images/Đừng làm trái tim anh đau.jpg",
+      "audioUrl": "assets/sound/Đừng Làm Trái Tim Anh Đau.mp3",
+    },
+    {
+      "id": "trending_4",
+      "title": "Gặp người hay nói",
+      "artist": "Unknown",
+      "image": "assets/images/Người im lặng gặp người hay nói.jpg",
+      "audioUrl": "assets/sound/Người Im Lặng Gặp Người Hay Nói.mp3",
     },
   ];
 

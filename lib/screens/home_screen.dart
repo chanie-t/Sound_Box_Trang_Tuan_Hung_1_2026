@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
         "artist": "Phương Ly",
         "image": "assets/images/Mặt trời của em_Phuongly.jpg",
         "audioUrl":
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            "assets/sound/Mặt Trời Của Em.mp3",
       },
       {
         "id": "morning_2",
@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
         "artist": "Sơn Tùng M-TP",
         "image": "assets/images/muộn rồi mà sao còn.jpg",
         "audioUrl":
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+            "assets/sound/Muộn Rồi Mà Sao Còn.mp3",
       },
       {
         "id": "morning_3",
@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
         "artist": "Sơn Tùng M-TP",
         "image": "assets/images/Lạc trôi.jpg",
         "audioUrl":
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+            "assets/sound/Lạc Trôi.mp3",
       },
       {
         "id": "morning_4",
@@ -42,15 +42,40 @@ class HomeScreen extends StatelessWidget {
         "artist": "Sơn Tùng M-TP",
         "image": "assets/images/Hãy trao cho anh.jpg",
         "audioUrl":
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+            "assets/sound/Hãy Trao Cho Anh.mp3",
       },
     ];
 
-    final List<String> artists = [
-      "assets/images/Cứ chill thôi_chillies.jpg",
-      "assets/images/Có công mài sắc_Ngolanhuong.jpg",
-      "assets/images/Đừng làm trái tim anh đau.jpg",
-      "assets/images/Người im lặng gặp người hay nói.jpg",
+    // Đã chuyển đổi từ danh sách ảnh thành danh sách bài hát có thể phát nhạc
+    final List<Map<String, String>> trendingSongs = [
+      {
+        "id": "trending_1",
+        "title": "Cứ chill thôi",
+        "artist": "Chillies",
+        "image": "assets/images/Cứ chill thôi_chillies.jpg",
+        "audioUrl": "assets/sound/Cứ Chill Thôi.mp3", // Bạn có thể thay bằng assets/sound/...
+      },
+      {
+        "id": "trending_2",
+        "title": "Có công mài sắc",
+        "artist": "Ngô Lan Hương",
+        "image": "assets/images/Có công mài sắc_Ngolanhuong.jpg",
+        "audioUrl": "assets/sound/Có công mài 'Sắc'.mp3", // Bạn có thể thay bằng assets/sound/...
+      },
+      {
+        "id": "trending_3",
+        "title": "Đừng làm trái tim anh đau",
+        "artist": "Sơn Tùng M-TP",
+        "image": "assets/images/Đừng làm trái tim anh đau.jpg",
+        "audioUrl": "assets/sound/Đừng Làm Trái Tim Anh Đau.mp3", // Bạn có thể thay bằng assets/sound/...
+      },
+      {
+        "id": "trending_4",
+        "title": "Gặp người hay nói",
+        "artist": "Unknown",
+        "image": "assets/images/Người im lặng gặp người hay nói.jpg",
+        "audioUrl": "assets/sound/Người Im Lặng Gặp Người Hay Nói.mp3", // Bạn có thể thay bằng assets/sound/...
+      },
     ];
 
     final List<Map<String, dynamic>> musicUtilities = [
@@ -67,7 +92,7 @@ class HomeScreen extends StatelessWidget {
       "title": "Nơi này có anh",
       "artist": "Sơn Tùng M-TP",
       "image": "assets/images/Nơi này có anh.jpg",
-      "audioUrl": "assets/audios/NoiNayCoAnh_SonTungMTP.mp3",
+      "audioUrl": "assets/sound/NoiNayCoAnh_SonTungMTP.mp3",
     };
 
     return Scaffold(
@@ -365,16 +390,20 @@ class HomeScreen extends StatelessWidget {
                 height: 110,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: artists.length,
+                  itemCount: trendingSongs.length,
                   itemBuilder: (context, index) {
+                    final song = trendingSongs[index];
                     return Padding(
                       padding: const EdgeInsets.only(right: 14),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: _buildImage(
-                          artists[index],
-                          width: 110,
-                          height: 110,
+                      child: GestureDetector(
+                        onTap: () => audioProvider.playSong(song),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: _buildImage(
+                            song["image"]!,
+                            width: 110,
+                            height: 110,
+                          ),
                         ),
                       ),
                     );

@@ -82,8 +82,10 @@ class AudioProvider extends ChangeNotifier {
 
       String audioUrl = song["audioUrl"] ?? "";
 
-      // Kiểm tra nếu là đường dẫn file trong máy (Thường bắt đầu bằng / hoặc chứa các thư mục hệ điều hành)
-      if (audioUrl.startsWith('/') ||
+      // Kiểm tra xem nhạc được gắn link dạng nào để chọn cách phát tương ứng:
+      if (audioUrl.startsWith('assets/')) {
+        await _audioPlayer.setAsset(audioUrl); // 1. Nạp file nhạc có sẵn trong source code
+      } else if (audioUrl.startsWith('/') ||
           audioUrl.contains('content://') ||
           File(audioUrl).existsSync()) {
         await _audioPlayer.setFilePath(audioUrl); // Nạp file cục bộ từ máy
