@@ -4,9 +4,9 @@ SoundBox là ứng dụng phát nhạc được xây dựng bằng Flutter, cung
 ---
 
 # Đội ngũ phát triển (Đại học Phenikaa)
-* Trang Nguyen Thuy  (MSSV: 23010487) 
-* Bui Thanh Tuan     (MSSV: 23010569)
-* Nguyen Do Phi Hung (MSSV: 23010606)
+* **Trang Nguyen Thuy**  (MSSV: 23010487) 
+* **Bui Thanh Tuan**     (MSSV: 23010569)
+* **Nguyen Do Phi Hung** (MSSV: 23010606)
 
 ## ✨ Chức năng chính
 * Đăng ký tài khoản và đăng nhập bằng Firebase Authentication.
