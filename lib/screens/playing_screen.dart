@@ -10,7 +10,6 @@ class PlayingScreen extends StatefulWidget {
 }
 
 class _PlayingScreenState extends State<PlayingScreen> {
-  // Hàm chuyển đổi từ Duration (thời gian) sang chuỗi định dạng mm:ss (Ví dụ: 03:45)
   String _formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     final minutes = twoDigits(duration.inMinutes.remainder(60));
@@ -20,26 +19,21 @@ class _PlayingScreenState extends State<PlayingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Gọi AudioProvider để lắng nghe dữ liệu và trạng thái bài hát đang phát
     final audioProvider = Provider.of<AudioProvider>(context);
     final currentSong = audioProvider.currentSong;
 
-    // Trường hợp phòng hờ nếu không có bài hát nào được chọn mà trang này vô tình mở ra
     if (currentSong == null) {
       return const Scaffold(
         body: Center(child: Text("Không có bài hát nào đang phát")),
       );
     }
 
-    // Lấy thời gian hiện tại và tổng thời lượng từ provider (mặc định Duration.zero nếu null)
     final position = audioProvider.position;
     final duration = audioProvider.duration;
 
-    // Chuyển đổi sang mili-giây phục vụ việc tính toán cho Slider
     double currentMs = position.inMilliseconds.toDouble();
     double totalMs = duration.inMilliseconds.toDouble();
 
-    // Giới hạn giá trị Slider tránh lỗi crash khi luồng stream nhạc chưa load kịp duration
     if (totalMs <= 0) totalMs = 1.0;
     currentMs = currentMs.clamp(0.0, totalMs);
 
@@ -146,7 +140,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
 
               const Spacer(),
 
-              // ================= 2. ALBUM ART DỰA TRÊN BÀI HÁT ĐANG PHÁT =================
+              // ================= 2. ALBUM ART =================
               AspectRatio(
                 aspectRatio: 1,
                 child: Container(
@@ -172,7 +166,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
 
               const Spacer(),
 
-              // ================= 3. SONG INFO (ĐÃ SỬA NÚT YÊU THÍCH ĐỘNG) =================
+              // ================= 3. SONG INFO =================
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -205,21 +199,15 @@ class _PlayingScreenState extends State<PlayingScreen> {
                       ],
                     ),
                   ),
-                  // Bọc InkWell/IconButton để tương tác bật tắt Yêu thích
                   IconButton(
-                    onPressed: () {
-                      audioProvider.toggleFavorite(currentSong);
-                    },
+                    onPressed: () => audioProvider.toggleFavorite(currentSong),
                     icon: Icon(
-                      // Nếu đã có trong danh sách thích thì hiện tim đặc, ngược lại hiện tim rỗng viền
                       audioProvider.isFavorite(currentSong["id"] ?? "")
                           ? Icons.favorite_rounded
                           : Icons.favorite_border_rounded,
                       color: audioProvider.isFavorite(currentSong["id"] ?? "")
-                          ? const Color(
-                              0xFF1DB954,
-                            ) // Màu xanh Spotify khi đã thích
-                          : Colors.grey.shade400, // Màu xám khi chưa thích
+                          ? const Color(0xFF1DB954)
+                          : Colors.grey.shade400,
                       size: 32,
                     ),
                   ),
@@ -253,7 +241,7 @@ class _PlayingScreenState extends State<PlayingScreen> {
                 ),
               ),
 
-              // Dòng hiển thị thời gian số (Ví dụ: 01:20 / 04:05)
+              // Thời gian chạy nhạc hiển thị dạng số
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: Row(
@@ -285,24 +273,29 @@ class _PlayingScreenState extends State<PlayingScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  // Nút Phát ngẫu nhiên (Shuffle)
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.shuffle,
                       size: 28,
-                      color: Colors.black87,
+                      color: audioProvider.isShuffle
+                          ? const Color(0xFF1DB954)
+                          : Colors.black87,
                     ),
-                    onPressed: () {},
+                    onPressed: () => audioProvider.toggleShuffle(),
                   ),
+
+                  // Nút Lùi bài (Previous)
                   IconButton(
                     icon: const Icon(
                       Icons.skip_previous_rounded,
                       size: 38,
                       color: Colors.black87,
                     ),
-                    onPressed: () {},
+                    onPressed: () => audioProvider.previousSong(),
                   ),
 
-                  // NÚT PLAY / PAUSE CHÍNH GIỮA MÀN HÌNH
+                  // Nút Play / Pause trung tâm
                   Container(
                     width: 68,
                     height: 68,
@@ -322,21 +315,26 @@ class _PlayingScreenState extends State<PlayingScreen> {
                     ),
                   ),
 
+                  // Nút Chuyển bài kế tiếp (Next)
                   IconButton(
                     icon: const Icon(
                       Icons.skip_next_rounded,
                       size: 38,
                       color: Colors.black87,
                     ),
-                    onPressed: () {},
+                    onPressed: () => audioProvider.nextSong(),
                   ),
+
+                  // Nút Lặp lại (Repeat)
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.repeat,
                       size: 28,
-                      color: Colors.black87,
+                      color: audioProvider.isRepeat
+                          ? const Color(0xFF1DB954)
+                          : Colors.black87,
                     ),
-                    onPressed: () {},
+                    onPressed: () => audioProvider.toggleRepeat(),
                   ),
                 ],
               ),

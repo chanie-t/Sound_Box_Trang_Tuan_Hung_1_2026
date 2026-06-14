@@ -106,12 +106,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.only(bottom: 20.0),
                             child: InkWell(
                               onTap: () {
-                                // Bấm vào bài hát yêu thích sẽ phát ngay lập tức
-                                audioProvider.playSong(song);
+                                // ĐÃ CẬP NHẬT: Truyền thêm `playlist` là danh sách yêu thích
+                                // giúp trình phát nhạc biết được bài tiếp theo hoặc bài trước đó để tự động chuyển dòng phát
+                                audioProvider.playSong(
+                                  song,
+                                  playlist: filteredFavorites,
+                                );
                               },
                               child: Row(
                                 children: [
-                                  // Ảnh bìa
+                                  // Ảnh bìa bài hát
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
                                     child: Image.asset(
@@ -137,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   const SizedBox(width: 16),
 
-                                  // Thông tin chữ
+                                  // Thông tin chữ (Tên bài hát, Nghệ sĩ)
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:

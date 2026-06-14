@@ -11,22 +11,24 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  // 1. Kho lưu trữ danh sách gốc tất cả các bài hát (Dữ liệu mẫu của bạn)
+  // Bộ điều khiển ô nhập liệu để kiểm tra trạng thái text rỗng hay không
+  final TextEditingController _searchController = TextEditingController();
+
+  // 1. Kho dữ liệu gốc bài hát
   final List<Map<String, String>> _allSongs = [
     {
       "id": "song_1",
       "title": "Nơi này có anh",
       "artist": "Sơn Tùng M-TP",
       "image": "assets/images/Nơi này có anh.jpg",
-      // 👉 GẮN LINK MẠNG HOẶC ĐƯỜNG DẪN ASSETS TẠI ĐÂY:
       "audioUrl": "assets/sound/NoiNayCoAnh_SonTungMTP.mp3",
     },
     {
       "id": "song_2",
       "title": "Lạc Trôi",
       "artist": "Sơn Tùng M-TP",
-      "image": "assets/images/Lạc trôi.jpg",
-      "audioUrl": "assets/sound/Lạc Trôi.mp3", // (Ví dụ dùng nhạc lưu sẵn trong thư mục code)
+      "image": "assets/images/Lạc Trôi.jpg",
+      "audioUrl": "assets/sound/Lạc Trôi.mp3",
     },
     {
       "id": "song_3",
@@ -35,7 +37,6 @@ class _SearchScreenState extends State<SearchScreen> {
       "image": "assets/images/Yêu nắm_Emily_Bigdaddy.jpg",
       "audioUrl": "assets/sound/Yêu Nắm.mp3",
     },
-    // BỔ SUNG CÁC BÀI HÁT TỪ TRANG CHỦ VÀO ĐÂY ĐỂ TÌM KIẾM
     {
       "id": "morning_1",
       "title": "Mặt trời của em",
@@ -62,7 +63,7 @@ class _SearchScreenState extends State<SearchScreen> {
       "title": "Cứ chill thôi",
       "artist": "Chillies",
       "image": "assets/images/Cứ chill thôi_chillies.jpg",
-      "audioUrl": "assets/sound/Cứ Chill Thôi.mp3", 
+      "audioUrl": "assets/sound/Cứ Chill Thôi.mp3",
     },
     {
       "id": "trending_2",
@@ -80,29 +81,32 @@ class _SearchScreenState extends State<SearchScreen> {
     },
     {
       "id": "trending_4",
-      "title": "Gặp người hay nói",
-      "artist": "Unknown",
+      "title": "Người im lặng gặp người hay nói",
+      "artist": "Hieuthuhai",
       "image": "assets/images/Người im lặng gặp người hay nói.jpg",
       "audioUrl": "assets/sound/Người Im Lặng Gặp Người Hay Nói.mp3",
     },
   ];
 
-  // 2. Danh sách biến động hiển thị lên màn hình sau khi lọc
+  // 2. Danh sách kết quả lọc sau khi tìm kiếm
   List<Map<String, String>> _foundSongs = [];
 
   @override
   void initState() {
     super.initState();
-    // Ban đầu khi chưa gõ gì, hiển thị toàn bộ bài hát
-    _foundSongs = _allSongs;
+    _foundSongs = []; // Mới vào chưa tìm kiếm, danh sách lọc để trống
   }
 
-  // 3. Hàm xử lý logic lọc tìm kiếm (Không phân biệt chữ hoa, chữ thường)
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  // 3. Hàm lọc dữ liệu
   void _runFilter(String enteredKeyword) {
     List<Map<String, String>> results = [];
-    if (enteredKeyword.isEmpty) {
-      results = _allSongs;
-    } else {
+    if (enteredKeyword.trim().isNotEmpty) {
       results = _allSongs.where((song) {
         final titleMatch = song["title"]!.toLowerCase().contains(
           enteredKeyword.toLowerCase(),
@@ -110,12 +114,10 @@ class _SearchScreenState extends State<SearchScreen> {
         final artistMatch = song["artist"]!.toLowerCase().contains(
           enteredKeyword.toLowerCase(),
         );
-        return titleMatch ||
-            artistMatch; // Tìm theo cả Tên bài hát HOẶC Tên ca sĩ
+        return titleMatch || artistMatch;
       }).toList();
     }
 
-    // Cập nhật lại UI hiển thị kết quả mới
     setState(() {
       _foundSongs = results;
     });
@@ -124,6 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final audioProvider = Provider.of<AudioProvider>(context, listen: false);
+    final isSearching = _searchController.text.trim().isNotEmpty;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -131,6 +134,8 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22),
           child: SingleChildScrollView(
+            // Giúp hiệu ứng chuyển động mượt mà không bị lỗi layout tràn viền
+            clipBehavior: Clip.none,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -149,7 +154,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 const SizedBox(height: 25),
 
-                // ================= SEARCH BOX (KẾT NỐI HÀM LỌC) =================
+                // ================= SEARCH BOX =================
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
@@ -157,13 +162,21 @@ class _SearchScreenState extends State<SearchScreen> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: TextField(
-                    onChanged: (value) => _runFilter(
-                      value,
-                    ), // Mỗi khi gõ chữ, gọi hàm lọc lập tức
+                    controller: _searchController,
+                    onChanged: (value) => _runFilter(value),
                     style: const TextStyle(color: Colors.black, fontSize: 16),
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       icon: const Icon(Icons.search, color: Colors.black),
+                      suffixIcon: isSearching
+                          ? IconButton(
+                              icon: const Icon(Icons.clear, color: Colors.grey),
+                              onPressed: () {
+                                _searchController.clear();
+                                _runFilter("");
+                              },
+                            )
+                          : null,
                       hintText: "Tìm kiếm bài hát, ca sĩ",
                       hintStyle: TextStyle(
                         color: Colors.grey.shade600,
@@ -172,114 +185,164 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 40),
 
-                // ================= SEARCH RESULT TITLE =================
-                const Text(
-                  "Gợi ý cho bạn",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                // ================= ANIMATED SWITCHER (HIỆU ỨNG RƠI / ĐỔI MÀN HÌNH) =================
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 350),
+                  switchInCurve:
+                      Curves.easeOutQuad, // Hiệu ứng rơi thả lỏng mượt mà
+                  switchOutCurve: Curves.easeInQuad,
+                  // LayoutBuilder giữ cho cấu trúc chiều rộng đồng bộ khi animate
+                  layoutBuilder: (currentChild, previousChildren) {
+                    return Stack(
+                      alignment: Alignment.topLeft,
+                      children: <Widget>[
+                        ...previousChildren,
+                        if (currentChild != null) currentChild,
+                      ],
+                    );
+                  },
+                  child: !isSearching
+                      ? _buildDefaultSuggestions(
+                          audioProvider,
+                        ) // Khung gợi ý mặc định
+                      : _buildSearchResults(
+                          audioProvider,
+                        ), // Khung kết quả tìm kiếm rơi xuống
                 ),
-                const SizedBox(height: 30),
-
-                // ================= SONG GRID (DỮ LIỆU ĐỘNG) =================
-                _foundSongs.isEmpty
-                    ? const Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 20),
-                          child: Text(
-                            "Không tìm thấy bài hát nào phù hợp",
-                            style: TextStyle(color: Colors.grey, fontSize: 16),
-                          ),
-                        ),
-                      )
-                    : GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _foundSongs.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 25,
-                              childAspectRatio: 0.58,
-                            ),
-                        itemBuilder: (context, index) {
-                          final song = _foundSongs[index];
-
-                          // Đã bọc GestureDetector để khi bấm vào bài nào, bài đó lập tức phát nhạc
-                          return GestureDetector(
-                            onTap: () {
-                              audioProvider.playSong(song);
-
-                              // [Tùy chọn]: Nếu muốn bấm vào bài hát rồi tự động mở màn hình PlayingScreen lên luôn
-                              // Navigator.push(context, MaterialPageRoute(builder: (_) => const PlayingScreen()));
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // IMAGE (Đã sửa từ Image.network sang Image.asset để đọc file từ máy đúng chuẩn)
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.asset(
-                                    // Xóa dấu gạch chéo ở đầu nếu có để đường dẫn assets hoạt động chuẩn
-                                    song["image"]!.startsWith('/')
-                                        ? song["image"]!.substring(1)
-                                        : song["image"]!,
-                                    height: 230,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      // Phòng hờ nếu thiếu file ảnh thật trong thư mục assets, app hiện khung xám thay vì crash
-                                      return Container(
-                                        height: 230,
-                                        color: Colors.grey.shade300,
-                                        child: const Icon(
-                                          Icons.music_note,
-                                          color: Colors.grey,
-                                          size: 50,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-
-                                // TITLE
-                                Text(
-                                  song["title"]!,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-
-                                // AUTHOR
-                                Text(
-                                  song["artist"]!, // Đồng bộ dùng key "artist" thay cho "author" để khớp với AudioProvider
-                                  style: TextStyle(
-                                    color: Colors.grey.shade700,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
                 const SizedBox(height: 120),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  // Khung UI 1: Gợi ý mặc định ban đầu khi chưa gõ chữ
+  Widget _buildDefaultSuggestions(AudioProvider audioProvider) {
+    return Column(
+      key: const ValueKey('DefaultSuggestions'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Gợi ý cho bạn",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 25),
+        _buildSongGrid(_allSongs, audioProvider),
+      ],
+    );
+  }
+
+  // Khung UI 2: Kết quả tìm kiếm (Sẽ xuất hiện bằng hiệu ứng đẩy từ trên xuống)
+  Widget _buildSearchResults(AudioProvider audioProvider) {
+    return Column(
+      key: const ValueKey('SearchResults'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Kết quả tìm thấy",
+              style: TextStyle(
+                color: Colors.blueAccent,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              "${_foundSongs.length} bài hát",
+              style: const TextStyle(color: Colors.grey, fontSize: 14),
+            ),
+          ],
+        ),
+        const SizedBox(height: 25),
+        _foundSongs.isEmpty
+            ? const Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 40),
+                  child: Text(
+                    "Không tìm thấy bài hát nào phù hợp",
+                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                  ),
+                ),
+              )
+            : _buildSongGrid(_foundSongs, audioProvider),
+      ],
+    );
+  }
+
+  // Widget dùng chung để dựng lưới GridView danh sách bài hát công thức chuẩn
+  Widget _buildSongGrid(
+    List<Map<String, String>> songs,
+    AudioProvider audioProvider,
+  ) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: songs.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 25,
+        childAspectRatio: 0.58,
+      ),
+      itemBuilder: (context, index) {
+        final song = songs[index];
+        return GestureDetector(
+          onTap: () => audioProvider.playSong(song),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  song["image"]!.startsWith('/')
+                      ? song["image"]!.substring(1)
+                      : song["image"]!,
+                  height: 230,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 230,
+                      color: Colors.grey.shade300,
+                      child: const Icon(
+                        Icons.music_note,
+                        color: Colors.grey,
+                        size: 50,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                song["title"]!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                song["artist"]!,
+                style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart'; // 1. Tích hợp Firebase Core
+import 'firebase_options.dart'; // 2. File cấu hình tự động tạo bởi FlutterFire CLI
+
 import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/search_screen.dart';
 import 'screens/playing_screen.dart';
+import 'screens/login_screen.dart'; // 3. Import màn hình Đăng nhập
 import 'providers/audio_provider.dart';
 
-void main() {
+void main() async {
+  // Đảm bảo hệ thống binding của Flutter hoàn tất trước khi chạy các lệnh async
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 4. Khởi tạo ứng dụng Firebase trước khi khởi chạy giao diện app
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(
+    // 5. Bọc ChangeNotifierProvider lên cấp cao nhất để toàn bộ ứng dụng sử dụng được AudioProvider
     ChangeNotifierProvider(
       create: (context) => AudioProvider(),
       child: const SoundBoxApp(),
@@ -24,7 +35,8 @@ class SoundBoxApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Sound Box',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MainScreen(),
+      // 6. Đặt màn hình khởi đầu mặc định là LoginScreen thay vì MainScreen
+      home: const LoginScreen(),
     );
   }
 }
@@ -84,8 +96,7 @@ class _MainScreenState extends State<MainScreen> {
                 height: 68,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Colors
-                      .white, // Chuyển sang màu trắng/sáng theo ảnh mẫu của bạn
+                  color: Colors.white,
                   border: Border(
                     top: BorderSide(color: Colors.grey.shade100, width: 1),
                   ),
@@ -156,10 +167,8 @@ class _MainScreenState extends State<MainScreen> {
                             ? Icons.favorite_rounded
                             : Icons.favorite_border_rounded,
                         color: audioProvider.isFavorite(currentSong["id"] ?? "")
-                            ? const Color(
-                                0xFF1DB954,
-                              ) // Màu xanh Spotify khi đã thích
-                            : Colors.grey.shade400, // Màu xám khi chưa thích
+                            ? const Color(0xFF1DB954)
+                            : Colors.grey.shade400,
                         size: 24,
                       ),
                       onPressed: () {
@@ -186,14 +195,13 @@ class _MainScreenState extends State<MainScreen> {
           // ================= LINE PROGRESS BAR MẢNH ĐÃ ĐỒNG BỘ THỜI GIAN THỰC =================
           if (currentSong != null)
             Container(
-              height: 2.5, // Độ dày thanh tiến trình siêu mảnh tinh tế
+              height: 2.5,
               width: double.infinity,
               color: Colors.grey.shade200,
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: FractionallySizedBox(
-                  widthFactor:
-                      progressFactor, // Đồng bộ trực tiếp theo thời gian phát thực tế
+                  widthFactor: progressFactor,
                   child: Container(color: Colors.black87),
                 ),
               ),
@@ -208,7 +216,7 @@ class _MainScreenState extends State<MainScreen> {
               children: [
                 _buildNavItem(Icons.home_filled, "Home", 0),
                 _buildNavItem(Icons.search_rounded, "Search", 1),
-                _buildNavItem(Icons.library_music_rounded, "Your Library", 2),
+                _buildNavItem(Icons.library_music_rounded, "My Music", 2),
               ],
             ),
           ),

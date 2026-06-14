@@ -28,7 +28,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       try {
-        DocumentSnapshot doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+        DocumentSnapshot doc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
         if (doc.exists) {
           final data = doc.data() as Map<String, dynamic>;
           setState(() {
@@ -100,7 +103,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
         title: const Text(
           'Hồ sơ của tôi',
-          style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: _isLoading
@@ -111,15 +118,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: [
                   const CircleAvatar(
                     radius: 50,
-                    backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=11'),
+                    backgroundImage: NetworkImage(
+                      'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQAnAMBIgACEQEDEQH/xAAbAAEAAwEBAQEAAAAAAAAAAAAAAQQFAgMGB//EAC4QAQACAQIFAwMCBwEAAAAAAAABAgMEEQUSITFREyJBMmFxUoIzYnKBkaGxJP/EABcBAQEBAQAAAAAAAAAAAAAAAAABAgP/xAAWEQEBAQAAAAAAAAAAAAAAAAAAARH/2gAMAwEAAhEDEQA/AP0wB0QAAAAEx1mIiN5amj0UUiL5Y3v4n4S3BQxabNl+ik7eZ6QtU4Zbb35Ij8Q0/wADOqzp4XHxln/CrqdJkwdbda+Ybbm9YvSa27SaPn5gX8nDLx/DvFvtPRRtWazMWjaY7xLUqOQFAAAAAAAAAEgu8Lw+pknJb6advy1Vbh9Ippa7d7dZWWKoAgAAKXEtPF8XqVj3U6z94XUZI5qWjzGwPnkOu26G4iAFAAAAAAAEg3tP0wY/6Yejz0076fHMfph6OagAAAB8BPSJB89b6rfmUJmes/lDcRACgAAAAAA7w09TJWm+3NO27l66aeXUY5/mgo2sNPSxVxxO/L8u0oc1AAAAEWjesx5hIDC1OH0Ms033jbeJeS3xSf8A1fthTbiACgAAAAAAmN46x3QA3dNnrmxRMTHN8x4ezH4bfl1MR+qNmwxVAEAABzkvXHSbXmIiHTM4tf30x/3mCCnmyerlvk8y80odEAAAAAAAAAAdUvNLVtXvWd4buDLXNji9fn/TBXOG2tGo5Kz7ZjrDNg1gGVAAJmIiZmdojuwdTl9bPa/xPb8NDi1rRhpET0m3X7syeyxHIDYAAAAAAAAAAlc4VG+qmfFZU9mpwrDNMdslo25u2/hKLwDCgAKXFY308T4sypnq3dVi9bBakd57MOazE7TG0x3ag5EoaQAAAAAAEusdLZLctazM/YHDvFivlnbHWZlf0/DY35s1v2wv0pWkbUjaPszaqnpuHxSebLPNPxEdl2I2SMgAAAAr6nR49R7p9t/MLADDz6TNhmZtG9fMPB9H37qeo4fiydaey327S1KMge+fT5ME7Xr08x2eK6iAFBMQNHh+kjaM2SN9/pif+paPPS6C2Ta2XetfHzLSxYqYo5cdYiHYxqgAAAAAAAAAAAItETG1o3jwpajh9be7DPLP6Z7LwD569bUtNb1msx8S5bes01dRTxeO0sa1LVtNZjrHduVE4oi2SkT2mYfQViIrER0iIBmgAigAAAAAAAAAAAAAHwyuI0rGpnaNt4iZBYP/2Q==',
+                    ),
                     backgroundColor: Colors.grey,
                   ),
                   const SizedBox(height: 30),
                   _buildTextField('Tên hiển thị', _displayNameController),
                   const SizedBox(height: 16),
-                  _buildTextField('Tên người dùng (Username)', _usernameController),
+                  _buildTextField(
+                    'Tên người dùng (Username)',
+                    _usernameController,
+                  ),
                   const SizedBox(height: 16),
-                  _buildTextField('Email', _emailController, readOnly: true), // Chỉ đọc
+                  _buildTextField(
+                    'Email',
+                    _emailController,
+                    readOnly: true,
+                  ), // Chỉ đọc
                   const SizedBox(height: 16),
                   _buildTextField('Ngày sinh (dd/mm/yyyy)', _dobController),
                   const SizedBox(height: 40),
@@ -138,7 +154,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
                               'Lưu thay đổi',
-                              style: TextStyle(fontSize: 16, color: Colors.white),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
                             ),
                     ),
                   ),
@@ -148,7 +167,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller, {bool readOnly = false}) {
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller, {
+    bool readOnly = false,
+  }) {
     return TextField(
       controller: controller,
       readOnly: readOnly,

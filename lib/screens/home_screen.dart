@@ -17,32 +17,28 @@ class HomeScreen extends StatelessWidget {
         "title": "Nhạc chill",
         "artist": "Phương Ly",
         "image": "assets/images/Mặt trời của em_Phuongly.jpg",
-        "audioUrl":
-            "assets/sound/Mặt Trời Của Em.mp3",
+        "audioUrl": "assets/sound/Mặt Trời Của Em.mp3",
       },
       {
         "id": "morning_2",
         "title": "Tình yêu",
         "artist": "Sơn Tùng M-TP",
         "image": "assets/images/muộn rồi mà sao còn.jpg",
-        "audioUrl":
-            "assets/sound/Muộn Rồi Mà Sao Còn.mp3",
+        "audioUrl": "assets/sound/Muộn Rồi Mà Sao Còn.mp3",
       },
       {
         "id": "morning_3",
         "title": "V-POP",
         "artist": "Sơn Tùng M-TP",
-        "image": "assets/images/Lạc trôi.jpg",
-        "audioUrl":
-            "assets/sound/Lạc Trôi.mp3",
+        "image": "assets/images/Lạc Trôi.jpg",
+        "audioUrl": "assets/sound/Lạc Trôi.mp3",
       },
       {
         "id": "morning_4",
         "title": "Vui vẻ",
         "artist": "Sơn Tùng M-TP",
         "image": "assets/images/Hãy trao cho anh.jpg",
-        "audioUrl":
-            "assets/sound/Hãy Trao Cho Anh.mp3",
+        "audioUrl": "assets/sound/Hãy Trao Cho Anh.mp3",
       },
     ];
 
@@ -53,28 +49,32 @@ class HomeScreen extends StatelessWidget {
         "title": "Cứ chill thôi",
         "artist": "Chillies",
         "image": "assets/images/Cứ chill thôi_chillies.jpg",
-        "audioUrl": "assets/sound/Cứ Chill Thôi.mp3", // Bạn có thể thay bằng assets/sound/...
+        "audioUrl":
+            "assets/sound/Cứ Chill Thôi.mp3", // Bạn có thể thay bằng assets/sound/...
       },
       {
         "id": "trending_2",
         "title": "Có công mài sắc",
         "artist": "Ngô Lan Hương",
         "image": "assets/images/Có công mài sắc_Ngolanhuong.jpg",
-        "audioUrl": "assets/sound/Có công mài 'Sắc'.mp3", // Bạn có thể thay bằng assets/sound/...
+        "audioUrl":
+            "assets/sound/Có công mài 'Sắc'.mp3", // Bạn có thể thay bằng assets/sound/...
       },
       {
         "id": "trending_3",
         "title": "Đừng làm trái tim anh đau",
         "artist": "Sơn Tùng M-TP",
         "image": "assets/images/Đừng làm trái tim anh đau.jpg",
-        "audioUrl": "assets/sound/Đừng Làm Trái Tim Anh Đau.mp3", // Bạn có thể thay bằng assets/sound/...
+        "audioUrl":
+            "assets/sound/Đừng Làm Trái Tim Anh Đau.mp3", // Bạn có thể thay bằng assets/sound/...
       },
       {
         "id": "trending_4",
-        "title": "Gặp người hay nói",
-        "artist": "Unknown",
+        "title": "Người im lặng gặp người hay nói",
+        "artist": "Hieuthuhai",
         "image": "assets/images/Người im lặng gặp người hay nói.jpg",
-        "audioUrl": "assets/sound/Người Im Lặng Gặp Người Hay Nói.mp3", // Bạn có thể thay bằng assets/sound/...
+        "audioUrl":
+            "assets/sound/Người Im Lặng Gặp Người Hay Nói.mp3", // Bạn có thể thay bằng assets/sound/...
       },
     ];
 
@@ -87,12 +87,11 @@ class HomeScreen extends StatelessWidget {
     ];
 
     final Map<String, String> newSong = {
-      "id":
-          "new_song_1", // Bổ sung ID để hệ thống phân biệt khi thêm vào danh sách yêu thích
-      "title": "Nơi này có anh",
+      "id": "new_song_1",
+      "title": "Come My Way",
       "artist": "Sơn Tùng M-TP",
-      "image": "assets/images/Nơi này có anh.jpg",
-      "audioUrl": "assets/sound/NoiNayCoAnh_SonTungMTP.mp3",
+      "image": "assets/images/Comemyway.jpg",
+      "audioUrl": "assets/sound/Comemyway.mp3",
     };
 
     return Scaffold(
