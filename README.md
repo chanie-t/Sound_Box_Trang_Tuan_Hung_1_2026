@@ -30,27 +30,27 @@ SoundBox là ứng dụng phát nhạc được xây dựng bằng Flutter, cung
 
 
 ## 📂 Cấu trúc thư mục
-lib/
+```text
+lib
 │
-├── providers/
-│      audio_provider.dart
+├── providers
+│   └── audio_provider.dart
 │
-├── screens/
-│      login_screen.dart
-│      register_screen.dart
-│      home_screen.dart
-│      search_screen.dart
-│      playing_screen.dart
-│      profile_screen.dart
-│      edit_profile_screen.dart
-│      settings_screen.dart
+├── screens
+│   ├── login_screen.dart
+│   ├── register_screen.dart
+│   ├── home_screen.dart
+│   ├── search_screen.dart
+│   ├── playing_screen.dart
+│   ├── profile_screen.dart
+│   └── settings_screen.dart
 │
-├── widgets/
-│
+├── widgets
 ├── Songclass.dart
 ├── Listenclass.dart
 ├── firebase_options.dart
 └── main.dart
+```
 
 ## 🔥 Cơ sở dữ liệu
 Ứng dụng sử dụng:
