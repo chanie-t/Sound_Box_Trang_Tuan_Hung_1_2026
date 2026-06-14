@@ -3,21 +3,21 @@
 SoundBox là ứng dụng phát nhạc được xây dựng bằng Flutter, cung cấp giao diện hiện đại và thân thiện với người dùng. Ứng dụng hỗ trợ phát nhạc, tìm kiếm bài hát, quản lý danh sách yêu thích và quản lý tài khoản cá nhân.
 ---
 
-**Đội ngũ phát triển (Đại học Phenikaa)
-Trang Nguyen Thuy  (MSSV: 23010487) 
-Bui Thanh Tuan     (MSSV: 23010569)
-Nguyen Do Phi Hung (MSSV: 23010606)
+# Đội ngũ phát triển (Đại học Phenikaa)
+* Trang Nguyen Thuy  (MSSV: 23010487) 
+* Bui Thanh Tuan     (MSSV: 23010569)
+* Nguyen Do Phi Hung (MSSV: 23010606)
 
 ## ✨ Chức năng chính
-* **Đăng ký tài khoản và đăng nhập bằng Firebase Authentication.
-* **Phát nhạc trực tuyến.
-* **Tìm kiếm bài hát theo tên bài hát hoặc ca sĩ.
-* **Thêm và xóa bài hát khỏi danh sách yêu thích.
-* **Điều khiển phát nhạc (Phát/Tạm dừng, Bài tiếp theo, Bài trước).
-* **Hỗ trợ chế độ phát ngẫu nhiên và lặp lại.
-* **Quản lý thông tin cá nhân.
-* **Chỉnh sửa hồ sơ người dùng.
-* **Đăng xuất khỏi hệ thống.
+* Đăng ký tài khoản và đăng nhập bằng Firebase Authentication.
+* Phát nhạc trực tuyến.
+* Tìm kiếm bài hát theo tên bài hát hoặc ca sĩ.
+* Thêm và xóa bài hát khỏi danh sách yêu thích.
+* Điều khiển phát nhạc (Phát/Tạm dừng, Bài tiếp theo, Bài trước).
+* Hỗ trợ chế độ phát ngẫu nhiên và lặp lại.
+* Quản lý thông tin cá nhân.
+* Chỉnh sửa hồ sơ người dùng.
+* Đăng xuất khỏi hệ thống.
 
 ## Công nghệ sử dụng
 * Flutter
@@ -54,8 +54,8 @@ lib/
 
 ## 🔥 Cơ sở dữ liệu
 Ứng dụng sử dụng:
-Firebase Authentication để xác thực tài khoản người dùng.
-Cloud Firestore để lưu trữ thông tin người dùng.
+* Firebase Authentication để xác thực tài khoản người dùng.
+* Cloud Firestore để lưu trữ thông tin người dùng.
 
 
 ## UI/UX
