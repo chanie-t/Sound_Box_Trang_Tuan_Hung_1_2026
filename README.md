@@ -1,22 +1,63 @@
-# Sound_Box_Trang_Tuan_Hung__1_2026
-# Dự án: Sound Box - Ứng dụng nghe nhạc thông minh
-**Nhóm sinh viên:** Trang, Tuấn, Hùng
-**Lớp:** Công nghệ thông tin - Đại học Phenikaa
+# 🎵 SoundBox - Ứng dụng nghe nhạc thông minh
 
-## Giới thiệu
-Sound Box là ứng dụng nghe nhạc được phát triển bằng Flutter, hỗ trợ quản lý danh sách bài hát và các tính năng nghe nhạc cơ bản.
+SoundBox là ứng dụng phát nhạc được xây dựng bằng Flutter, cung cấp giao diện hiện đại và thân thiện với người dùng. Ứng dụng hỗ trợ phát nhạc, tìm kiếm bài hát, quản lý danh sách yêu thích và quản lý tài khoản cá nhân.
+---
 
-## Các tính năng chính (CRUD)
-* **Create:** Thêm bài hát mới vào thư viện.
-* **Read:** Xem danh sách bài hát và thông tin chi tiết.
-* **Update:** Chỉnh sửa thông tin bài hát (Tên, ca sĩ...).
-* **Delete:** Xóa bài hát khỏi danh sách.
+**Đội ngũ phát triển (Đại học Phenikaa)
+Trang Nguyen Thuy  (MSSV: 23010487) 
+Bui Thanh Tuan     (MSSV: 23010569)
+Nguyen Do Phi Hung (MSSV: 23010606)
+
+## ✨ Chức năng chính
+* **Đăng ký tài khoản và đăng nhập bằng Firebase Authentication.
+* **Phát nhạc trực tuyến.
+* **Tìm kiếm bài hát theo tên bài hát hoặc ca sĩ.
+* **Thêm và xóa bài hát khỏi danh sách yêu thích.
+* **Điều khiển phát nhạc (Phát/Tạm dừng, Bài tiếp theo, Bài trước).
+* **Hỗ trợ chế độ phát ngẫu nhiên và lặp lại.
+* **Quản lý thông tin cá nhân.
+* **Chỉnh sửa hồ sơ người dùng.
+* **Đăng xuất khỏi hệ thống.
 
 ## Công nghệ sử dụng
-* Flutter Framework
-* Dart (Generic Class, Static, CRUD Logic)
+* Flutter
+* Dart
+* Firebase Authentication
+* Cloud Firestore
+* Provider State Management
+* Just Audio
+* Material Design
 
-  
+
+## 📂 Cấu trúc thư mục
+lib/
+│
+├── providers/
+│      audio_provider.dart
+│
+├── screens/
+│      login_screen.dart
+│      register_screen.dart
+│      home_screen.dart
+│      search_screen.dart
+│      playing_screen.dart
+│      profile_screen.dart
+│      edit_profile_screen.dart
+│      settings_screen.dart
+│
+├── widgets/
+│
+├── Songclass.dart
+├── Listenclass.dart
+├── firebase_options.dart
+└── main.dart
+
+## 🔥 Cơ sở dữ liệu
+Ứng dụng sử dụng:
+Firebase Authentication để xác thực tài khoản người dùng.
+Cloud Firestore để lưu trữ thông tin người dùng.
+
+
 ## UI/UX
 https://www.figma.com/design/TFAEh7uTfj4vnbiXpBWHhL/Sound-box?node-id=0-1&t=g7YQnvEy5MWAdeXV-1
 
